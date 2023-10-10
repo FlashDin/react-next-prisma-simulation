@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model company {
+  id      Int       @id @default(autoincrement())
+  name    String?
+  job_loc job_loc[]
+}
+
+model job_loc {
+  id         Int        @id @default(autoincrement())
+  name       String?
+  company    company    @relation(fields: [company_id], references: [id])
+  company_id Int
+  division   division[]
+  engage     engage[]
+  enable     enable[]
+  energize   energize[]
+}
+
+model division {
+  id         Int     @id @default(autoincrement())
+  name       String?
+  job_loc    job_loc @relation(fields: [job_loc_id], references: [id])
+  job_loc_id Int
+  item       item[]
+}
+
+model variable {
+  id       Int        @id @default(autoincrement())
+  name     String
+  engage   engage[]
+  enable   enable[]
+  energize energize[]
+  item     item[]
+}
+
+model engage {
+  id          Int      @id @default(autoincrement())
+  job_loc     job_loc  @relation(fields: [job_loc_id], references: [id])
+  job_loc_id  Int
+  variable    variable @relation(fields: [variable_id], references: [id])
+  variable_id Int
+  reg         Float
+}
+
+model enable {
+  id          Int      @id @default(autoincrement())
+  job_loc     job_loc  @relation(fields: [job_loc_id], references: [id])
+  job_loc_id  Int
+  variable    variable @relation(fields: [variable_id], references: [id])
+  variable_id Int
+  reg         Float
+}
+
+model energize {
+  id          Int      @id @default(autoincrement())
+  job_loc     job_loc  @relation(fields: [job_loc_id], references: [id])
+  job_loc_id  Int
+  variable    variable @relation(fields: [variable_id], references: [id])
+  variable_id Int
+  reg         Float
+}
+
+model item {
+  id          Int      @id @default(autoincrement())
+  division    division @relation(fields: [division_id], references: [id])
+  division_id Int
+  variable    variable @relation(fields: [variable_id], references: [id])
+  variable_id Int
+  value_bf    Float
+  value_af    Float
+}
